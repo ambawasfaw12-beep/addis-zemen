@@ -1,11 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "api/generate-plan.js", "use": "@vercel/node" },
     { "src": "public/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/api/generate-plan", "dest": "/api/generate-plan.js" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
