@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Addis Zemen Preparatory School – About Us</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .about-card {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .about-card:last-child { margin-bottom: 0; }
+
+    .mission-tag {
+      display: inline-block;
+      background: #ffeaea;
+      color: var(--red);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .vision-tag {
+      display: inline-block;
+      background: #fff8dc;
+      color: #9a7700;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .history-tag {
+      display: inline-block;
+      background: #e8f5eb;
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .school-photo {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .value-chip {
+      background: var(--gray-light);
+      border-left: 3px solid var(--green);
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    @media(min-width: 768px) {
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .about-grid .full-width { grid-column: 1 / -1; }
+    }
+
+    @media(min-width: 1024px) {
+      .about-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .about-grid .full-width { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="eth-stripe"></div>
+
+  <nav class="navbar">
+    <div class="logo">
+      <svg class="logo-icon" viewBox="0 0 46 46" fill="none">
+        <rect width="46" height="46" rx="6" fill="#f0f7f2"/>
+        <rect x="8" y="28" width="30" height="3" rx="1.5" fill="#1a5c2a"/>
+        <rect x="8" y="33" width="30" height="3" rx="1.5" fill="#1a5c2a"/>
+        <path d="M23 8L34 22H12Z" fill="#1a5c2a"/>
+        <circle cx="23" cy="18" r="3.5" fill="#f5c518"/>
+      </svg>
+      <div class="logo-text">
+        <div class="school-name">ADDIS ZEMEN</div>
+        <div class="school-sub">Preparatory School</div>
+      </div>
+    </div>
+    <div class="nav-links-desktop">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About Us</a>
+      <a href="academics.html">Academics</a>
+    </div>
+    <button class="hamburger" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav-overlay" id="overlay" onclick="closeMenu()"></div>
+  <div class="nav-drawer" id="drawer">
+    <a href="index.html">🏠 Home</a>
+    <a href="about.html" class="active">ℹ️ About Us</a>
+    <a href="academics.html">📚 Academics</a>
+  </div>
+
+  <div class="page-banner">
+    <h1>About Us</h1>
+    <div class="underline"></div>
+  </div>
+
+  <!-- ABOUT CONTENT -->
+  <section class="section-padded">
+    <!-- Photo -->
+    <img
+      class="school-photo"
+      src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80"
+      alt="Addis Zemen Preparatory School"
+    />
+
+    <div class="about-grid">
+      <!-- History -->
+      <div class="about-card">
+        <div class="history-tag">Our History</div>
+        <p class="section-body" style="margin:0;">
+          Addis Zemen Preparatory School was established in 1990 with the mission of providing quality education to the youth of our community. Over the years, the school has grown and developed, maintaining its commitment to excellence and discipline.
+        </p>
+      </div>
+
+      <!-- Mission -->
+      <div class="about-card">
+        <div class="mission-tag">Our Mission</div>
+        <p class="section-body" style="margin:0;">
+          To provide quality education that empowers students to develop their potential and contribute positively to society.
+        </p>
+      </div>
+
+      <!-- Vision -->
+      <div class="about-card">
+        <div class="vision-tag">Our Vision</div>
+        <p class="section-body" style="margin:0;">
+          To be a leading preparatory school recognized for academic excellence and character development.
+        </p>
+      </div>
+    </div>
+
+    <!-- Values -->
+    <div class="about-card" style="margin-top:14px;">
+      <div class="section-title" style="margin-bottom:14px;">Our Values</div>
+      <div class="values-grid">
+        <div class="value-chip">✦ Excellence</div>
+        <div class="value-chip">✦ Integrity</div>
+        <div class="value-chip">✦ Discipline</div>
+        <div class="value-chip">✦ Respect</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TEAM -->
+  <section class="section-padded" style="background: var(--gray-light);">
+    <div class="section-title">Our Leadership Team</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-card-img">
+          <svg viewBox="0 0 60 60" fill="none" width="50" height="50">
+            <circle cx="30" cy="22" r="12" fill="#1a5c2a" opacity="0.35"/>
+            <path d="M10 54c0-11 9-18 20-18s20 7 20 18" fill="#1a5c2a" opacity="0.35"/>
+          </svg>
+        </div>
+        <div class="team-card-info">
+          <div class="team-card-name">Ato Shambel Abebe</div>
+          <div class="team-card-role">School Director</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-card-img">
+          <svg viewBox="0 0 60 60" fill="none" width="50" height="50">
+            <circle cx="30" cy="22" r="12" fill="#1a5c2a" opacity="0.35"/>
+            <path d="M10 54c0-11 9-18 20-18s20 7 20 18" fill="#1a5c2a" opacity="0.35"/>
+          </svg>
+        </div>
+        <div class="team-card-info">
+          <div class="team-card-name">Ato Mulugeta Haile</div>
+          <div class="team-card-role">Academic Dean</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-card-img">
+          <svg viewBox="0 0 60 60" fill="none" width="50" height="50">
+            <circle cx="30" cy="22" r="12" fill="#1a5c2a" opacity="0.35"/>
+            <path d="M10 54c0-11 9-18 20-18s20 7 20 18" fill="#1a5c2a" opacity="0.35"/>
+          </svg>
+        </div>
+        <div class="team-card-info">
+          <div class="team-card-name">W/ro Selamawit T.</div>
+          <div class="team-card-role">Student Affairs</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-card-img">
+          <svg viewBox="0 0 60 60" fill="none" width="50" height="50">
+            <circle cx="30" cy="22" r="12" fill="#1a5c2a" opacity="0.35"/>
+            <path d="M10 54c0-11 9-18 20-18s20 7 20 18" fill="#1a5c2a" opacity="0.35"/>
+          </svg>
+        </div>
+        <div class="team-card-info">
+          <div class="team-card-name">Ato Dawit Girma</div>
+          <div class="team-card-role">Finance &amp; Admin</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-info">
+      <span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4zm0 5.5A1.5 1.5 0 1 1 7 3a1.5 1.5 0 0 1 0 3z" fill="white"/></svg>
+        Addis Zemen, Ethiopia
+      </span>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h3l1.5 3.5-1.8 1.1A9 9 0 0 0 8.4 9.3l1.1-1.8L13 9v3c-6 0-11-5-11-10z" fill="white"/></svg>
+        +251 11 123 4567
+      </span>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="white" stroke-width="1.3" fill="none"/><path d="M1 4l6 4.5L13 4" stroke="white" stroke-width="1.3"/></svg>
+        info@addiszemenprep.edu.et
+      </span>
+    </div>
+    <div class="footer-copy">© 2026 Addis Zemen Preparatory School</div>
+  </footer>
+
+  <script>
+    const ham = document.getElementById('ham');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+    function openMenu(){ ham.classList.add('open'); drawer.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeMenu(){ ham.classList.remove('open'); drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; }
+    ham.addEventListener('click', ()=> ham.classList.contains('open') ? closeMenu() : openMenu());
+  </script>
+</body>
+</html>

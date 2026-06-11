@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Addis Zemen Preparatory School – Academics</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .programs-card {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .pass-rate-bar { margin-top:6px; }
+    .pass-rate-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .pass-rate-year { font-size:.8rem; font-weight:700; color:var(--text-dark); width:36px; flex-shrink:0; }
+    .pass-rate-track { flex:1; height:10px; background:#e0e0e0; border-radius:6px; overflow:hidden; }
+    .pass-rate-fill  { height:100%; background:var(--green); border-radius:6px; }
+    .pass-rate-pct   { font-size:.78rem; font-weight:700; color:var(--green); width:42px; text-align:right; flex-shrink:0; }
+    .result-cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+    .result-chip  { background:var(--gray-light); border-radius:8px; padding:12px 14px; text-align:center; }
+    .result-chip .rc-year { font-size:.75rem; color:var(--gray-text); margin-bottom:4px; }
+    .result-chip .rc-pass { font-size:1.1rem; font-weight:700; color:var(--green); }
+    .result-chip .rc-fail { font-size:.78rem; color:var(--red); margin-top:1px; }
+    @media(min-width:768px){
+      .academics-cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start; }
+      .result-cards   { grid-template-columns:repeat(4,1fr); }
+    }
+
+    /* ══════════════════════════════════
+       STUDY PLANNER
+     Cervical system
+     ══════════════════════════════════ */
+    #planner-section {
+      background: linear-gradient(135deg, #0f3d1a 0%, #1a5c2a 100%);
+      padding: 32px 16px 40px;
+    }
+    .planner-header { text-align:center; margin-bottom:24px; }
+    .planner-header h2 { font-family:var(--font-heading); font-size:1.5rem; color:var(--white); font-weight:700; }
+    .planner-header p  { font-size:.88rem; color:rgba(255,255,255,.72); margin-top:6px; }
+    .ai-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--yellow); color:#1a1a1a;
+      font-size:.72rem; font-weight:700; letter-spacing:.8px; text-transform:uppercase;
+      padding:4px 12px; border-radius:20px; margin-bottom:10px;
+    }
+
+    /* Tabs */
+    .planner-tabs {
+      display:flex; background:rgba(255,255,255,.08);
+      border-radius:10px; padding:4px; gap:4px; margin-bottom:20px;
+    }
+    .planner-tab {
+      flex:1; text-align:center; padding:12px 4px;
+      border-radius:7px; font-size:.9rem; font-weight:600;
+      color:rgba(255,255,255,.6); cursor:pointer;
+      transition:all .25s; -webkit-tap-highlight-color:transparent; user-select:none;
+    }
+    .planner-tab.active { background:var(--white); color:var(--green); }
+    .planner-panel { display:none; }
+    .planner-panel.active { display:block; }
+
+    /* Form */
+    .ai-form { display:flex; flex-direction:column; gap:14px; }
+    .ai-form label { font-size:.8rem; font-weight:600; color:rgba(255,255,255,.8); margin-bottom:4px; display:block; }
+    .ai-form input,
+    .ai-form select,
+    .ai-form textarea {
+      width:100%; padding:13px 14px; border-radius:8px;
+      border:1.5px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.08); color:var(--white);
+      font-size:.92rem; font-family:var(--font-body);
+      outline:none; -webkit-appearance:none; transition:border-color .2s; box-sizing:border-box;
+    }
+    .ai-form input::placeholder,
+    .ai-form textarea::placeholder { color:rgba(255,255,255,.4); }
+    .ai-form input:focus,
+    .ai-form select:focus,
+    .ai-form textarea:focus { border-color:var(--yellow); }
+    .ai-form select option { background:#1a5c2a; color:#fff; }
+    .ai-form textarea { resize:vertical; min-height:80px; }
+
+    .subject-chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .subject-chip {
+      padding:7px 14px; border-radius:20px;
+      border:1.5px solid rgba(255,255,255,.25);
+      color:rgba(255,255,255,.75); font-size:.8rem;
+      cursor:pointer; transition:all .2s;
+      -webkit-tap-highlight-color:transparent; user-select:none;
+    }
+    .subject-chip.selected { background:var(--yellow); border-color:var(--yellow); color:#1a1a1a; font-weight:700; }
+
+    .btn-generate {
+      width:100%; padding:15px; background:var(--yellow); color:#1a1a1a;
+      font-weight:700; font-size:1rem; border:none; border-radius:10px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      gap:8px; min-height:52px; -webkit-tap-highlight-color:transparent;
+      transition:opacity .2s, transform .15s;
+    }
+    .btn-generate:active   { transform:scale(.97); }
+    .btn-generate:disabled { opacity:.55; cursor:not-allowed; }
+
+    .spinner {
+      width:20px; height:20px; border:2.5px solid rgba(26,26,26,.3);
+      border-top-color:#1a1a1a; border-radius:50%; animation:spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* AI result */
+    .ai-result-box {
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+      border-radius:10px; padding:18px; margin-top:16px; display:none;
+    }
+    .ai-result-box.visible { display:block; }
+    .ai-result-box h4 { font-family:var(--font-heading); font-size:1rem; color:var(--yellow); margin-bottom:12px; }
+    .plan-day-card {
+      background:rgba(255,255,255,.07); border-radius:8px; padding:14px;
+      margin-bottom:10px; border-left:3px solid var(--yellow);
+    }
+    .plan-day-title { font-weight:700; font-size:.88rem; color:var(--yellow); margin-bottom:8px; }
+    .plan-task {
+      display:flex; align-items:flex-start; gap:8px; padding:5px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      font-size:.84rem; color:rgba(255,255,255,.85);
+    }
+    .plan-task:last-child { border-bottom:none; }
+    .plan-task-dot { width:7px; height:7px; background:var(--yellow); border-radius:50%; flex-shrink:0; margin-top:5px; }
+    .btn-save-plan {
+      width:100%; margin-top:14px; padding:13px;
+      background:rgba(255,255,255,.1); color:var(--white);
+      border:1.5px solid rgba(255,255,255,.2); border-radius:8px;
+      font-weight:600; font-size:.9rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:7px;
+      -webkit-tap-highlight-color:transparent; transition:background .2s;
+    }
+    .btn-save-plan:hover { background:rgba(255,255,255,.18); }
+
+    /* My Plans */
+    .plans-empty { text-align:center; padding:40px 20px; color:rgba(255,255,255,.45); font-size:.9rem; }
+    .plans-empty svg { margin:0 auto 14px; display:block; opacity:.3; }
+    .saved-plan-card {
+      background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1);
+      border-radius:10px; padding:16px; margin-bottom:12px;
+    }
+    .saved-plan-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:10px; }
+    .saved-plan-name { font-weight:700; font-size:.95rem; color:var(--white); }
+    .saved-plan-meta { font-size:.75rem; color:rgba(255,255,255,.5); margin-top:2px; }
+    .plan-actions    { display:flex; gap:8px; flex-shrink:0; }
+    .btn-icon {
+      width:36px; height:36px; border-radius:7px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.07); color:rgba(255,255,255,.7);
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      -webkit-tap-highlight-color:transparent; transition:background .2s;
+    }
+    .btn-icon:hover { background:rgba(255,255,255,.14); }
+    .btn-icon.danger { border-color:rgba(200,16,46,.4); color:#ff6b6b; }
+    .btn-icon.danger:hover { background:rgba(200,16,46,.15); }
+    .plan-progress-wrap { margin-top:10px; }
+    .plan-progress-label { display:flex; justify-content:space-between; font-size:.75rem; color:rgba(255,255,255,.5); margin-bottom:5px; }
+    .plan-progress-track { height:7px; background:rgba(255,255,255,.1); border-radius:4px; overflow:hidden; }
+    .plan-progress-fill  { height:100%; background:var(--yellow); border-radius:4px; transition:width .4s; }
+
+    /* Modal bottom sheet */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,.65);
+      z-index:500; display:none; align-items:flex-end; justify-content:center;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal-sheet {
+      background:#0f3d1a; border-radius:18px 18px 0 0;
+      width:100%; max-width:600px; max-height:88vh;
+      overflow-y:auto; padding:0 0 32px; animation:slideUp .3s ease;
+    }
+    @keyframes slideUp { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+    .modal-drag { width:40px; height:4px; background:rgba(255,255,255,.2); border-radius:2px; margin:12px auto 0; }
+    .modal-head {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 20px 14px; border-bottom:1px solid rgba(255,255,255,.08);
+      position:sticky; top:0; background:#0f3d1a; z-index:10;
+    }
+    .modal-head h3 { font-family:var(--font-heading); font-size:1.05rem; color:var(--white); }
+    .btn-close-modal {
+      width:32px; height:32px; border-radius:50%;
+      background:rgba(255,255,255,.1); border:none; color:var(--white);
+      font-size:1.1rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .modal-body { padding:16px 20px; }
+    .modal-task {
+      display:flex; align-items:flex-start; gap:12px; padding:10px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+    }
+    .modal-task:last-child { border-bottom:none; }
+    .task-checkbox {
+      width:22px; height:22px; border-radius:6px;
+      border:2px solid rgba(255,255,255,.3); flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      margin-top:1px; transition:all .2s;
+    }
+    .task-checkbox.checked { background:var(--yellow); border-color:var(--yellow); }
+    .task-checkbox.checked::after { content:'✓'; color:#1a1a1a; font-size:.78rem; font-weight:900; }
+    .modal-task-text { font-size:.88rem; color:rgba(255,255,255,.85); line-height:1.5; }
+    .modal-task-text.done { text-decoration:line-through; opacity:.4; }
+    .modal-day-title { font-weight:700; font-size:.85rem; color:var(--yellow); padding:14px 0 6px; }
+
+    @media(min-width:768px){
+      #planner-section { padding:50px 40px 56px; }
+    }
+    @media(min-width:1024px){
+      #planner-section { padding:56px 60px 64px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="eth-stripe"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">
+      <svg class="logo-icon" viewBox="0 0 46 46" fill="none">
+        <rect width="46" height="46" rx="6" fill="#f0f7f2"/>
+        <rect x="8" y="28" width="30" height="3" rx="1.5" fill="#1a5c2a"/>
+        <rect x="8" y="33" width="30" height="3" rx="1.5" fill="#1a5c2a"/>
+        <path d="M23 8L34 22H12Z" fill="#1a5c2a"/>
+        <circle cx="23" cy="18" r="3.5" fill="#f5c518"/>
+      </svg>
+      <div class="logo-text">
+        <div class="school-name">ADDIS ZEMEN</div>
+        <div class="school-sub">Preparatory School</div>
+      </div>
+    </div>
+    <div class="nav-links-desktop">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="academics.html" class="active">Academics</a>
+    </div>
+    <button class="hamburger" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav-overlay" id="overlay" onclick="closeMenu()"></div>
+  <div class="nav-drawer" id="drawer">
+    <a href="index.html">🏠 Home</a>
+    <a href="about.html">ℹ️ About Us</a>
+    <a href="academics.html" class="active">📚 Academics</a>
+  </div>
+
+  <div class="page-banner">
+    <h1>Academics</h1>
+    <div class="underline"></div>
+  </div>
+
+  <!-- PROGRAMS & RESULTS -->
+  <section class="section-padded">
+    <div class="academics-cols">
+      <div>
+        <div class="programs-card">
+          <div class="section-title">Our Academic Programs</div>
+          <p class="section-body">We offer programs from Grade 9 to Grade 12 with a strong focus on preparing students for the national exam and higher education.</p>
+          <div class="feature-list">
+            <div class="feature-item"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><path d="M2 6l3 3 5-5" stroke="#1a5c2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Qualified and dedicated teachers</div>
+            <div class="feature-item"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><path d="M2 6l3 3 5-5" stroke="#1a5c2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Well-structured curriculum</div>
+            <div class="feature-item"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><path d="M2 6l3 3 5-5" stroke="#1a5c2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>National exam preparation</div>
+            <div class="feature-item"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><path d="M2 6l3 3 5-5" stroke="#1a5c2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Guidance and counseling</div>
+            <div class="feature-item"><div class="check-icon"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><path d="M2 6l3 3 5-5" stroke="#1a5c2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Discipline and character building</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="programs-card">
+          <div class="section-title">Grade 12 National Exam Results</div>
+          <div class="result-cards">
+            <div class="result-chip"><div class="rc-year">2014</div><div class="rc-pass">152 ✓</div><div class="rc-fail">802 ✗</div></div>
+            <div class="result-chip"><div class="rc-year">2015</div><div class="rc-pass">201 ✓</div><div class="rc-fail">801 ✗</div></div>
+            <div class="result-chip"><div class="rc-year">2016</div><div class="rc-pass">265 ✓</div><div class="rc-fail">835 ✗</div></div>
+            <div class="result-chip"><div class="rc-year">2017</div><div class="rc-pass">342 ✓</div><div class="rc-fail">738 ✗</div></div>
+          </div>
+          <div class="section-title" style="font-size:.95rem;margin-bottom:12px;">Pass Rate Trend</div>
+          <div class="pass-rate-bar">
+            <div class="pass-rate-row"><span class="pass-rate-year">2014</span><div class="pass-rate-track"><div class="pass-rate-fill" style="width:15.93%"></div></div><span class="pass-rate-pct">15.93%</span></div>
+            <div class="pass-rate-row"><span class="pass-rate-year">2015</span><div class="pass-rate-track"><div class="pass-rate-fill" style="width:20.06%"></div></div><span class="pass-rate-pct">20.06%</span></div>
+            <div class="pass-rate-row"><span class="pass-rate-year">2016</span><div class="pass-rate-track"><div class="pass-rate-fill" style="width:24.09%"></div></div><span class="pass-rate-pct">24.09%</span></div>
+            <div class="pass-rate-row"><span class="pass-rate-year">2017</span><div class="pass-rate-track"><div class="pass-rate-fill" style="width:31.67%"></div></div><span class="pass-rate-pct">31.67%</span></div>
+          </div>
+        </div>
+        <div class="programs-card" style="padding:0;overflow:hidden;">
+          <div style="padding:16px 16px 10px;font-family:var(--font-heading);font-size:.95rem;font-weight:700;color:var(--green);">Detailed Results</div>
+          <div class="table-scroll">
+            <table class="styled-table">
+              <thead><tr><th>Year</th><th>Total</th><th>Passed</th><th>Failed</th><th>Rate</th></tr></thead>
+              <tbody>
+                <tr><td>2014</td><td>954</td><td>152</td><td>802</td><td>15.93%</td></tr>
+                <tr><td>2015</td><td>1,002</td><td>201</td><td>801</td><td>20.06%</td></tr>
+                <tr><td>2016</td><td>1,100</td><td>265</td><td>835</td><td>24.09%</td></tr>
+                <tr><td>2017</td><td>1,080</td><td>342</td><td>738</td><td>31.67%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI STUDY PLANNER -->
+  <section id="planner-section">
+
+    <div class="planner-header">
+      <div class="ai-badge">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="5" stroke="#1a1a1a" stroke-width="1.4"/>
+          <path d="M6 3v3l2 1" stroke="#1a1a1a" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        AI Powered
+      </div>
+      <h2>📚 AI Study Planner</h2>
+      <p>Generate a personalized study plan and track your progress — saved on your device.</p>
+    </div>
+
+    <!-- 2 Tabs -->
+    <div class="planner-tabs">
+      <div class="planner-tab active" onclick="switchTab('generate')">✨ Generate Plan</div>
+      <div class="planner-tab" onclick="switchTab('plans')">📋 My Plans</div>
+    </div>
+
+    <!-- TAB 1: Generate Plan -->
+    <div class="planner-panel active" id="panel-generate">
+      <div class="ai-form">
+        <div>
+          <label>Your Name</label>
+          <input type="text" id="inp-name" placeholder="e.g. Abebe Kebede" autocomplete="off"/>
+        </div>
+        <div>
+          <label>Grade Level</label>
+          <select id="inp-grade">
+            <option value="">Select your grade</option>
+            <option>Grade 9</option>
+            <option>Grade 10</option>
+            <option>Grade 11</option>
+            <option>Grade 12</option>
+          </select>
+        </div>
+        <div>
+          <label>Subjects to Focus On (tap to select)</label>
+          <div class="subject-chips">
+            <div class="subject-chip" onclick="toggleSubject(this)">Mathematics</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">Physics</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">Chemistry</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">Biology</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">English</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">Economics</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">History</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">Geography</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">Civics</div>
+            <div class="subject-chip" onclick="toggleSubject(this)">ICT</div>
+          </div>
+        </div>
+        <div>
+          <label>Study Days Per Week</label>
+          <select id="inp-days">
+            <option value="3">3 days a week</option>
+            <option value="4">4 days a week</option>
+            <option value="5" selected>5 days a week</option>
+            <option value="6">6 days a week</option>
+            <option value="7">Every day</option>
+          </select>
+        </div>
+        <div>
+          <label>Hours Available Per Day</label>
+          <select id="inp-hours">
+            <option value="1">1 hour</option>
+            <option value="2" selected>2 hours</option>
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5+ hours</option>
+          </select>
+        </div>
+        <div>
+          <label>Weak Areas / Topics You Struggle With (optional)</label>
+          <textarea id="inp-weak" placeholder="e.g. Algebra, essay writing, organic chemistry…"></textarea>
+        </div>
+        <div>
+          <label>Your Goal</label>
+          <select id="inp-goal">
+            <option value="pass the national exam">Pass the National Exam</option>
+            <option value="improve my grades">Improve My Grades</option>
+            <option value="university entrance preparation">University Entrance Preparation</option>
+            <option value="general improvement">General Improvement</option>
+          </select>
+        </div>
+        <button class="btn-generate" id="btnGen" onclick="generatePlan()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M9 1l2 6h6l-5 3.5 2 6L9 13l-5 3.5 2-6L1 7h6z" fill="#1a1a1a"/>
+          </svg>
+          Generate My AI Study Plan
+        </button>
+      </div>
+
+      <div class="ai-result-box" id="aiResultBox">
+        <h4 id="resultTitle">Your Personalized Study Plan</h4>
+        <div id="resultDays"></div>
+        <button class="btn-save-plan" onclick="savePlan()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 2h8l3 3v9H2V2z" stroke="white" stroke-width="1.4" fill="none"/>
+            <rect x="5" y="9" width="6" height="5" rx="1" stroke="white" stroke-width="1.3" fill="none"/>
+            <rect x="5" y="2" width="5" height="3" rx=".5" stroke="white" stroke-width="1.3" fill="none"/>
+          </svg>
+          Save This Plan to My Plans
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 2: My Plans -->
+    <div class="planner-panel" id="panel-plans">
+      <div id="plansList"></div>
+    </div>
+
+  </section>
+
+  <!-- Plan Detail Modal -->
+  <div class="modal-overlay" id="planModal" onclick="closeModalOverlay(event)">
+    <div class="modal-sheet">
+      <div class="modal-drag"></div>
+      <div class="modal-head">
+        <h3 id="modalTitle">Study Plan</h3>
+        <button class="btn-close-modal" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-info">
+      <span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4zm0 5.5A1.5 1.5 0 1 1 7 3a1.5 1.5 0 0 1 0 3z" fill="white"/></svg>Addis Zemen, Ethiopia</span>
+      <span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h3l1.5 3.5-1.8 1.1A9 9 0 0 0 8.4 9.3l1.1-1.8L13 9v3c-6 0-11-5-11-10z" fill="white"/></svg>+251 11 123 4567</span>
+      <span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="white" stroke-width="1.3" fill="none"/><path d="M1 4l6 4.5L13 4" stroke="white" stroke-width="1.3"/></svg>info@addiszemenprep.edu.et</span>
+    </div>
+    <div class="footer-copy">© 2026 Addis Zemen Preparatory School</div>
+  </footer>
+
+  <script>
+  // ═══════════════════════════
+  //  NAVBAR
+  // ═══════════════════════════
+  const ham     = document.getElementById('ham');
+  const drawer  = document.getElementById('drawer');
+  const overlay = document.getElementById('overlay');
+  function openMenu(){  ham.classList.add('open');    drawer.classList.add('open');    overlay.classList.add('open');    document.body.style.overflow='hidden'; }
+  function closeMenu(){ ham.classList.remove('open'); drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; }
+  ham.addEventListener('click', () => ham.classList.contains('open') ? closeMenu() : openMenu());
+
+  // ═══════════════════════════
+  //  TABS
+  // ═══════════════════════════
+  function switchTab(name) {
+    document.querySelectorAll('.planner-tab').forEach((t, i) =>
+      t.classList.toggle('active', ['generate','plans'][i] === name));
+    document.querySelectorAll('.planner-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    if (name === 'plans') renderPlans();
+  }
+
+  // ═══════════════════════════
+  //  SUBJECTS
+  // ═══════════════════════════
+  function toggleSubject(el) { el.classList.toggle('selected'); }
+  function getSubjects() {
+    return [...document.querySelectorAll('.subject-chip.selected')].map(c => c.textContent);
+  }
+
+  // ═══════════════════════════
+  //  TALK TO THE BACKEND
+  // ═══════════════════════════
+  async function generatePlan() {
+    const name     = document.getElementById('inp-name').value.trim() || 'Student';
+    const grade    = document.getElementById('inp-grade').value;
+    const subjects = getSubjects();
+    const days     = document.getElementById('inp-days').value;
+    const hours    = document.getElementById('inp-hours').value;
+    const weak     = document.getElementById('inp-weak').value.trim();
+    const goal     = document.getElementById('inp-goal').value;
+
+    if (!grade)           { alert('Please select your grade level.'); return; }
+    if (!subjects.length) { alert('Please select at least one subject.'); return; }
+
+    const btn = document.getElementById('btnGen');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Generating your plan…';
+
+    try {
+      // CONNECTS TO YOUR LIVE PRODUCTION VERCEL DEPLOYMENT URL
+      const apiUrl = window.location.origin + '/api/generate-plan';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, grade, subjects, days, hours, weak, goal })
+      });
+
+      if (!response.ok) {
+        throw new Error('Server returned an error status: ' + response.status);
+      }
+
+      const plan = await response.json();
+      
+      currentPlan = { ...plan, name, grade, subjects, goal, tasksDone: {} };
+      renderResult(plan);
+
+    } catch(e) {
+      alert('Could not generate plan.\nError: ' + e.message + '\n\nPlease ensure your production backend server is active.');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1l2 6h6l-5 3.5 2 6L9 13l-5 3.5 2-6L1 7h6z" fill="#1a1a1a"/></svg> Generate My AI Study Plan';
+  }
+
+  function renderResult(plan) {
+    document.getElementById('resultTitle').textContent = plan.planTitle || 'Your Study Plan';
+    const c = document.getElementById('resultDays');
+    c.innerHTML = '<p style="color:rgba(255,255,255,.7);font-size:.85rem;margin-bottom:14px;">' + (plan.summary || '') + '</p>';
+    (plan.days || []).forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'plan-day-card';
+      card.innerHTML = '<div class="plan-day-title">' + d.day + '</div>' +
+        (d.tasks || []).map(t => '<div class="plan-task"><div class="plan-task-dot"></div><span>' + t + '</span></div>').join('');
+      c.appendChild(card);
+    });
+    const box = document.getElementById('aiResultBox');
+    box.classList.add('visible');
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ═══════════════════════════
+  //  SAVE / LOAD  (localStorage)
+  // ═══════════════════════════
+  const PLANS_KEY = 'azps_study_plans';
+  function getPlans() { try { return JSON.parse(localStorage.getItem(PLANS_KEY) || '[]'); } catch(e) { return []; } }
+  function setPlans(p) { localStorage.setItem(PLANS_KEY, JSON.stringify(p)); }
+
+  function savePlan() {
+    if (!currentPlan) return;
+    const plans = getPlans();
+    const saved = { id: Date.now().toString(), ...currentPlan, savedAt: new Date().toLocaleDateString('en-GB'), tasksDone: {} };
+    plans.unshift(saved);
+    setPlans(plans);
+    alert('Plan "' + saved.planTitle + '" saved to My Plans!');
+    switchTab('plans');
+  }
+
+  function deletePlan(id) {
+    if (!confirm('Delete this study plan?')) return;
+    setPlans(getPlans().filter(p => p.id !== id));
+    renderPlans();
+  }
+
+  function renderPlans() {
+    const plans = getPlans();
+    const c     = document.getElementById('plansList');
+    if (!plans.length) {
+      c.innerHTML = '<div class="plans-empty"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect x="10" y="8" width="32" height="36" rx="4" stroke="white" stroke-width="2.5" fill="none"/><path d="M18 20h16M18 27h16M18 34h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>No saved plans yet.<br>Generate your first AI plan above!</div>';
+      return;
+    }
+    c.innerHTML = '';
+    plans.forEach(plan => {
+      const total = (plan.days || []).reduce((s, d) => s + (d.tasks || []).length, 0);
+      const done  = Object.values(plan.tasksDone || {}).filter(Boolean).length;
+      const pct   = total ? Math.round(done / total * 100) : 0;
+      const card  = document.createElement('div');
+      card.className = 'saved-plan-card';
+      card.innerHTML =
+        '<div class="saved-plan-head">' +
+          '<div><div class="saved-plan-name">' + plan.planTitle + '</div>' +
+          '<div class="saved-plan-meta">' + plan.name + ' · ' + plan.grade + ' · Saved ' + plan.savedAt + '</div></div>' +
+          '<div class="plan-actions">' +
+            '<button class="btn-icon" onclick="openModal(\'' + plan.id + '\')" title="View &amp; track">' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.5-5 6-5 6 5 6 5-2.5 5-6 5S1 7 1 7z" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>' +
+            '</button>' +
+            '<button class="btn-icon danger" onclick="deletePlan(\'' + plan.id + '\')" title="Delete">' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M3 4l1 8h6l1-8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="plan-progress-wrap">' +
+          '<div class="plan-progress-label"><span>' + done + '/' + total + ' tasks done</span><span>' + pct + '%</span></div>' +
+          '<div class="plan-progress-track"><div class="plan-progress-fill" style="width:' + pct + '%"></div></div>' +
+        '</div>';
+      c.appendChild(card);
+    });
+  }
+
+  // ═══════════════════════════
+  //  PLAN MODAL
+  // ═══════════════════════════
+  function openModal(id) {
+    const plan = getPlans().find(p => p.id === id);
+    if (!plan) return;
+    document.getElementById('modalTitle').textContent = plan.planTitle;
+    const body = document.getElementById('modalBody');
+    body.innerHTML = '';
+    (plan.days || []).forEach(day => {
+      const dt = document.createElement('div');
+      dt.className = 'modal-day-title';
+      dt.textContent = day.day;
+      body.appendChild(dt);
+      (day.tasks || []).forEach((task, ti) => {
+        const key  = day.day + '__' + ti;
+        const done = !!(plan.tasksDone || {})[key];
+        const row  = document.createElement('div');
+        row.className = 'modal-task';
+        row.innerHTML = '<div class="task-checkbox ' + (done ? 'checked' : '') + '"></div><div class="modal-task-text ' + (done ? 'done' : '') + '">' + task + '</div>';
+        row.onclick = () => toggleTask(id, key, row);
+        body.appendChild(row);
+      });
+    });
+    document.getElementById('planModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function toggleTask(planId, key, row) {
+    const plans = getPlans();
+    const plan  = plans.find(p => p.id === planId);
+    if (!plan) return;
+    plan.tasksDone = plan.tasksDone || {};
+    plan.tasksDone[key] = !plan.tasksDone[key];
+    setPlans(plans);
+    row.querySelector('.task-checkbox').classList.toggle('checked', plan.tasksDone[key]);
+    row.querySelector('.modal-task-text').classList.toggle('done', plan.tasksDone[key]);
+  }
+
+  function closeModalOverlay(e) { if (e.target === document.getElementById('planModal')) closeModal(); }
+  function closeModal() {
+    document.getElementById('planModal').classList.remove('open');
+    document.body.style.overflow = '';
+    renderPlans();
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "addis-zemen-school",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "echo 'Use Vercel for deployment'",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.8.0"
+  }
+}
